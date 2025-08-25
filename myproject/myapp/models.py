@@ -26,6 +26,7 @@ class Entry(models.Model):
     number_of_comments = models.IntegerField(default=0)
     number_of_pingbacks = models.IntegerField(default=0)
     rating = models.IntegerField(default=5)
+    is_open = models.BooleanField(default=True)  # Thêm trường is_open
 
     def __str__(self):
         return self.headline
