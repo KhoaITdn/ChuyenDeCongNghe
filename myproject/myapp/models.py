@@ -1,31 +1,31 @@
+# myapp/models.py
+from datetime import date
 from django.db import models
 
-SHIRT_SIZES = [
-    ("S", "Small"),
-    ("M", "Medium"),
-    ("L", "Large"),
-]
-
-class Person(models.Model):
-    name = models.CharField(max_length=60, default='anonymous')
-    shirt_size = models.CharField(max_length=1, choices=SHIRT_SIZES, default='M')
-
-class Musician(models.Model):
-    first_name = models.CharField(max_length=50)
-    last_name = models.CharField(max_length=50)
-    instrument = models.CharField(max_length=100)
-
-
-class Album(models.Model):
-    artist = models.ForeignKey(Musician, on_delete=models.CASCADE)
+class Blog(models.Model):
     name = models.CharField(max_length=100)
-    release_date = models.DateField()
-    num_stars = models.IntegerField()
+    tagline = models.TextField()
 
-class Runner(models.Model):
-    MedalType = models.TextChoices("MedalType", "GOLD SILVER BRONZE")
-    name = models.CharField(max_length=60)
-    medal = models.CharField(blank=True, choices=MedalType, max_length=10)
+    def __str__(self):
+        return self.name
 
-class Fruit(models.Model):
-    name = models.CharField(max_length=100, primary_key=True)        
+class Author(models.Model):
+    name = models.CharField(max_length=200)
+    email = models.EmailField()
+
+    def __str__(self):
+        return self.name
+
+class Entry(models.Model):
+    blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+    headline = models.CharField(max_length=255)
+    body_text = models.TextField()
+    pub_date = models.DateField()
+    mod_date = models.DateField(default=date.today)
+    authors = models.ManyToManyField(Author)
+    number_of_comments = models.IntegerField(default=0)
+    number_of_pingbacks = models.IntegerField(default=0)
+    rating = models.IntegerField(default=5)
+
+    def __str__(self):
+        return self.headline
